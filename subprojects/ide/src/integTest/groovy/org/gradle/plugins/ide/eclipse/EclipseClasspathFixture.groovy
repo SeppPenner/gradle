@@ -93,6 +93,10 @@ class EclipseClasspathFixture {
         void assertHasAttribute(String key, String value) {
             assert entry.attributes.attribute.find { it.@name == key && it.@value == value }
         }
+
+        void assertHasNoAttribute(String key, String value) {
+            assert !entry.attributes.attribute.find { it.@name == key && it.@value == value }
+        }
     }
 
     class EclipseSourceDir extends EclipseClasspathEntry {
@@ -189,7 +193,11 @@ class EclipseClasspathFixture {
             assert entry.attributes[0].find { it.@name == 'org.eclipse.jst.component.nondependency' && it.@value == '' }
         }
 
-        void assertHasNoDeploymentAttributes() {
+        void assertHasNoAttribute(String key, String value) {
+            assert !entry.attributes.attribute.find { it.@name == key && it.@value == value }
+        }
+
+        void assertHasNoAttributes() {
             assert entry.attributes.isEmpty()
         }
 

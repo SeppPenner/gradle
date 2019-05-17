@@ -17,7 +17,6 @@
 package org.gradle.plugins.ide.eclipse.model.internal;
 
 import com.google.common.base.Function;
-import com.google.common.base.Joiner;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.LinkedHashMultimap;
@@ -27,13 +26,12 @@ import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
 import org.gradle.api.file.DirectoryTree;
 import org.gradle.api.file.FileCollection;
-import org.gradle.internal.metaobject.DynamicObjectUtil;
 import org.gradle.api.specs.Spec;
 import org.gradle.api.tasks.SourceSet;
 import org.gradle.api.tasks.util.PatternSet;
 import org.gradle.internal.Cast;
 import org.gradle.internal.Pair;
-import org.gradle.plugins.ide.eclipse.internal.EclipsePluginConstants;
+import org.gradle.internal.metaobject.DynamicObjectUtil;
 import org.gradle.plugins.ide.eclipse.model.EclipseClasspath;
 import org.gradle.plugins.ide.eclipse.model.SourceFolder;
 import org.gradle.util.CollectionUtils;
@@ -171,8 +169,9 @@ public class SourceFoldersCreator {
     }
 
     private void addScopeAttributes(SourceFolder folder, SourceSet sourceSet, Multimap<SourceSet, SourceSet> sourceSetUsages) {
-        folder.getEntryAttributes().put(EclipsePluginConstants.GRADLE_SCOPE_ATTRIBUTE_NAME, sanitizeNameForAttribute(sourceSet));
-        folder.getEntryAttributes().put(EclipsePluginConstants.GRADLE_USED_BY_SCOPE_ATTRIBUTE_NAME, Joiner.on(',').join(getUsingSourceSetNames(sourceSet, sourceSetUsages)));
+        if (folder.getPath().toLowerCase().contains("test")) {
+            folder.getEntryAttributes().put("test", "true");
+        }
     }
 
     private List<String> getUsingSourceSetNames(SourceSet sourceSet, Multimap<SourceSet, SourceSet> sourceSetUsages) {
